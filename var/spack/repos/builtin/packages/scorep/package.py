@@ -45,6 +45,7 @@ class Scorep(AutotoolsPackage):
     variant("pdt", default=False, description="Enable PDT")
     variant("shmem", default=False, description="Enable shmem tracing")
     variant("unwind", default=False, description="Enable sampling via libunwind and lib wrapping")
+    variant('cuda', default=False, description="Enable CUDA support")
 
     # Dependencies for SCORE-P are quite tight. See the homepage for more
     # information. Starting with scorep 4.0 / cube 4.4, Score-P only depends on
@@ -55,6 +56,7 @@ class Scorep(AutotoolsPackage):
     depends_on("cubew@4.6:", when="@7:")
     depends_on("cubelib@4.6:", when="@7:")
     depends_on("opari2@2.0.6:", when="@7:")
+    depends_on("cuda@11.5.0:", when="@7:")
     # SCOREP 6
     depends_on("otf2@2.2:", when="@6:")
     # SCOREP 4 and 5
@@ -117,6 +119,9 @@ class Scorep(AutotoolsPackage):
 
         if "+unwind" in spec:
             config_args.append("--with-libunwind=%s" % spec["libunwind"].prefix)
+
+        if "+cuda" in spec:
+            config_args.append("--with-libcudart=%s" % spec['cuda'].prefix)
 
         config_args += self.with_or_without("shmem")
         if not spec.satisfies("platform=cray"):
