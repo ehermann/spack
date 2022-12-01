@@ -84,6 +84,7 @@ class Tau(Package):
     variant("io", default=True, description="Activates POSIX I/O support")
     variant("adios2", default=False, description="Activates ADIOS2 output support")
     variant("sqlite", default=False, description="Activates SQLite3 output support")
+    variant("trace", default=False, description="Activates Tracing")
     variant(
         "profileparam",
         default=False,
@@ -216,6 +217,8 @@ class Tau(Package):
 
         if "+scorep" in spec:
             options.append("-scorep=%s" % spec["scorep"].prefix)
+        if "+trace" in spec:
+            options.append("-TRACE")
 
         if "+pthreads" in spec:
             options.append("-pthread")
